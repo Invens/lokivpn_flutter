@@ -1,6 +1,9 @@
+import 'package:amp_vpn/country_selection_screen.dart';
+import 'package:amp_vpn/settings.dart';
 import 'package:flutter/material.dart';
 
 import 'api_service.dart';
+import 'homepage.dart';
 
 class RecentlyConnectedScreen extends StatefulWidget {
   const RecentlyConnectedScreen({super.key});
@@ -71,23 +74,32 @@ class _RecentlyConnectedScreenState extends State<RecentlyConnectedScreen> {
                 } else {
                   return ListView(
                     children: snapshot.data!.map((server) {
+                      // Check for null values and provide default values
+                      String serverName =
+                          server['serverName'] ?? 'Unknown Server';
+                      String connectionTime =
+                          server['connectionTime'] ?? 'Unknown Time';
+                      double dataUsed = (server['dataUsed'] ?? 0.0).toDouble();
+                      String countryFlag = server['CountryFlag'] ?? '';
+
                       return ListTile(
-                        leading: Image.network(
-                          server['CountryFlag'],
-                          width: 40,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Icon(Icons.flag),
-                        ),
-                        title: Text(server['serverName']),
-                        subtitle:
-                            Text('Connected on: ${server['connectionTime']}'),
+                        leading: countryFlag.isNotEmpty
+                            ? Image.network(
+                                countryFlag,
+                                width: 40,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Icon(Icons.flag),
+                              )
+                            : Icon(Icons.flag),
+                        title: Text(serverName),
+                        subtitle: Text('Connected on: $connectionTime'),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             const Text('Data Used',
                                 style: TextStyle(fontSize: 12)),
-                            Text('${server['dataUsed']} MB',
+                            Text('$dataUsed MB',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold)),
                           ],
@@ -102,16 +114,17 @@ class _RecentlyConnectedScreenState extends State<RecentlyConnectedScreen> {
         ],
       ),
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        margin: const EdgeInsets.only(
+            left: 10, right: 10, bottom: 10), // Adjust margins as needed
         decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(30.0),
+          color: Colors.blue, // Background color set to blue
+          borderRadius: BorderRadius.circular(30.0), // Circular border radius
           boxShadow: const [
             BoxShadow(
               color: Colors.blue,
               spreadRadius: 2,
               blurRadius: 5,
-              offset: Offset(0, 3),
+              offset: Offset(0, 3), // changes position of shadow
             ),
           ],
         ),
@@ -137,24 +150,39 @@ class _RecentlyConnectedScreenState extends State<RecentlyConnectedScreen> {
               ),
             ],
             onTap: (index) {
+              // Handle the tap event for each item
               switch (index) {
                 case 0:
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Homepage()),
+                  );
                   break;
                 case 1:
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ServerScreen(onServerSelected: (serverDetails) {
+                              // handle server selection
+                            })),
+                  );
                   break;
                 case 2:
                   break;
                 case 3:
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Settings()),
+                  );
                   break;
               }
             },
-            currentIndex: 2,
+            currentIndex: 1,
             selectedItemColor: Colors.blue,
             unselectedItemColor: Colors.grey,
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors
+                .transparent, // Set transparent background for BottomNavigationBar
           ),
         ),
       ),

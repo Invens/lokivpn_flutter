@@ -25,8 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
   bool _agreeToTerms = false;
 
   Future<void> signUp(BuildContext context) async {
-    String apiUrl =
-        'https://api.lokivpn.com/api/users/register'; // Replace with your API endpoint
+    String apiUrl = 'https://api.lokivpn.com/api/users/register';
     var requestBody = {
       "Name": _nameController.text,
       "Email": _emailController.text,
@@ -44,21 +43,32 @@ class _SignUpPageState extends State<SignUpPage> {
         headers: {'Content-Type': 'application/json'},
       );
 
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
       if (response.statusCode == 201 || response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
 
-        // Check if the response contains the expected message
-        if (responseBody['message'] == 'User registered successfully') {
-          // Save the userID to SharedPreferences
+        if (responseBody['message'] ==
+            'User registered successfully. Please verify your email.') {
+          // Save userID and token to SharedPreferences
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString(
               'userID', responseBody['user']['UserID'].toString());
+          await prefs.setString(
+              'token', responseBody['token']); // Save the token
+
+          print('UserID: ${responseBody['user']['UserID']}');
+          print('Token: ${responseBody['token']}');
 
           // Navigate to OTP verification page
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => const OtpVerificationPage()),
+              builder: (context) => OtpVerificationPage(
+                userID: responseBody['user']['UserID'].toString(),
+              ),
+            ),
           );
         } else {
           // Handle unexpected response
@@ -79,8 +89,9 @@ class _SignUpPageState extends State<SignUpPage> {
     } catch (e) {
       // Handle exceptions
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Error occurred. Please try again later.'),
+        SnackBar(
+          content:
+              Text('Error occurred. Please try again later. ${e.toString()}'),
         ),
       );
     } finally {
@@ -95,11 +106,9 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
-          // Status bar color
           statusBarColor: Colors.lightBlueAccent,
-          // Status bar brightness (optional)
-          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
         ),
         actions: [
           Padding(
@@ -141,16 +150,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                            top:
-                                30.0), // Adjust padding to prevent hiding behind app bar
+                        padding: const EdgeInsets.only(top: 30.0),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              50.0), // Adjust the radius as needed
+                          borderRadius: BorderRadius.circular(50.0),
                           child: Image.asset(
                             'assets/logo2.png',
-                            height: 200, // Adjust the height as needed
-                            width: 200, // Adjust the width as needed
+                            height: 200,
+                            width: 200,
                           ),
                         ),
                       ),
@@ -256,11 +262,11 @@ class _SignUpPageState extends State<SignUpPage> {
                             padding: const EdgeInsets.symmetric(vertical: 15.0),
                           ).copyWith(
                             backgroundColor:
-                                WidgetStateProperty.resolveWith((states) {
+                                MaterialStateProperty.resolveWith((states) {
                               return _agreeToTerms ? Colors.blue : Colors.grey;
                             }),
                             elevation:
-                                WidgetStateProperty.resolveWith((states) {
+                                MaterialStateProperty.resolveWith((states) {
                               return 0.0;
                             }),
                           ),
@@ -344,9 +350,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                          height:
-                              20), // Add padding at the bottom of the login section
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -363,6 +367,8 @@ class _SignUpPageState extends State<SignUpPage> {
       final response = await _guestUserService.registerOrLoginGuest();
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setBool('isFirstTime', false);
       await prefs.setBool('isGuest', true);
       await prefs.setString('guestToken', response['token']);
       await prefs.setString('guestID', response['guestID'].toString());

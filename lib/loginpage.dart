@@ -21,11 +21,9 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
-          // Status bar color
           statusBarColor: Colors.lightBlueAccent,
-          // Status bar brightness (optional)
-          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
         ),
         actions: [
           Padding(
@@ -270,12 +268,18 @@ class LoginPage extends StatelessWidget {
         _passwordController.text,
       );
 
+      print(
+          'Login response: $response'); // Debugging line to check the response
+
       // Save token or user information in shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
       await prefs.setBool('isFirstTime', false);
       await prefs.setString('token', response['token']);
       await prefs.setString('userID', response['userID'].toString());
+
+      print('Token saved: ${response['token']}');
+      print('UserID saved: ${response['userID']}');
 
       // Navigate to homepage
       Navigator.pushReplacement(
@@ -295,6 +299,8 @@ class LoginPage extends StatelessWidget {
       final response = await _guestUserService.registerOrLoginGuest();
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setBool('isFirstTime', false);
       await prefs.setBool('isGuest', true);
       await prefs.setString('guestToken', response['token']);
       await prefs.setString('guestID', response['guestID'].toString());

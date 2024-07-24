@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:openvpn_flutter/openvpn_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpn_info/vpn_info.dart';
@@ -29,6 +30,7 @@ class _HomepageState extends State<Homepage> {
   double _downloadSpeed = 0.0;
   double _uploadSpeed = 0.0;
   late Timer _vpnStateTimer;
+  String? _selectedServerFlagUrl;
 
   @override
   void initState() {
@@ -163,6 +165,7 @@ class _HomepageState extends State<Homepage> {
   void _onServerSelected(Map<String, dynamic> serverDetails) {
     setState(() {
       _selectedServer = serverDetails;
+      _selectedServerFlagUrl = serverDetails['CountryFlag'];
     });
   }
 
@@ -184,6 +187,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -191,7 +195,7 @@ class _HomepageState extends State<Homepage> {
           margin: const EdgeInsets.all(7),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white,
+            color: Colors.black,
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
@@ -220,9 +224,10 @@ class _HomepageState extends State<Homepage> {
             top: 0,
             left: 0,
             right: 0,
-            child: Image.network(
-              'https://brave.com/background.jpg',
-              fit: BoxFit.cover,
+            child: Lottie.asset(
+              'assets/lottie/background.json', // Your Lottie file path
+              fit: BoxFit.contain,
+              width: 40,
               height: MediaQuery.of(context).size.height * 0.6,
             ),
           ),
@@ -230,8 +235,8 @@ class _HomepageState extends State<Homepage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 10),
-                const SizedBox(height: 20),
+                const SizedBox(height: 0),
+                const SizedBox(height: 0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -254,7 +259,7 @@ class _HomepageState extends State<Homepage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 60),
                 Stack(
                   alignment: Alignment.center,
                   children: [
@@ -269,30 +274,46 @@ class _HomepageState extends State<Homepage> {
                             await _connectVPN();
                           }
                         },
-                        child: Image.asset(_isConnected
-                            ? 'assets/connect.png'
-                            : 'assets/disconnect.png'),
+                        child: Lottie.asset(
+                          _isConnected
+                              ? 'assets/lottie/connect.json'
+                              : 'assets/lottie/disconnect.json',
+                        ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
-                Text(
-                  _isConnecting
-                      ? 'CONNECTING...'
-                      : _isConnected
-                          ? 'DISCONNECT'
-                          : 'CONNECT',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 110.0), // Added top margin here
+                  child: Text(
+                    _isConnecting
+                        ? 'CONNECTING...'
+                        : _isConnected
+                            ? 'DISCONNECT'
+                            : 'CONNECT',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Container(
                     width: double.infinity,
+                    margin: const EdgeInsets.only(
+                        top: 20.0), // Top margin for the button
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 0.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0.0),
+                        ),
+                        iconColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -301,9 +322,47 @@ class _HomepageState extends State<Homepage> {
                                   onServerSelected: _onServerSelected)),
                         );
                       },
-                      child: Text(_selectedServer == null
-                          ? 'Select Server'
-                          : _selectedServer!['CountryName']),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.blue, Colors.lightBlueAccent],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (_selectedServerFlagUrl != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Image.network(
+                                    _selectedServerFlagUrl!,
+                                    width: 24,
+                                    height: 24,
+                                    errorBuilder: (context, error,
+                                            stackTrace) =>
+                                        Icon(Icons.flag, color: Colors.white),
+                                  ),
+                                ),
+                              Text(
+                                _selectedServer == null
+                                    ? 'Select Server'
+                                    : _selectedServer!['CountryName'],
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                  height: 2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
