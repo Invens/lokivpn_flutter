@@ -1,6 +1,8 @@
+import 'dart:convert';
+
+import 'package:amp_vpn/payment.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:amp_vpn/services/subscription_service.dart';
+import 'package:http/http.dart' as http;
 
 class SubscriptionScreen extends StatefulWidget {
   @override
@@ -8,35 +10,42 @@ class SubscriptionScreen extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
-  final SubscriptionService _subscriptionService = SubscriptionService(baseUrl: 'http://your-backend-url.com');
   late Future<List<dynamic>> _subscriptionTypesFuture;
 
   @override
   void initState() {
     super.initState();
-    _subscriptionTypesFuture = _subscriptionService.getSubscriptionTypes();
+    _subscriptionTypesFuture = _fetchSubscriptionTypes();
   }
 
-  Future<void> _upgradeSubscription(int newSubscriptionID) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
-
-    if (token != null) {
-      await _subscriptionService.upgradeSubscription(token, newSubscriptionID);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Subscription upgraded successfully')),
-      );
+  Future<List<dynamic>> _fetchSubscriptionTypes() async {
+    final response =
+        await http.get(Uri.parse('https://api.lokivpn.com/api/subscriptions'));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please log in to upgrade your subscription')),
-      );
+      throw Exception('Failed to load subscription types');
     }
+  }
+
+  void _onSubscriptionSelected(Map<String, dynamic> subscription) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentScreen(
+          subscriptionTypeId: subscription['SubscriptionTypeID'],
+          description: subscription['Description'],
+          amount: (double.parse(subscription['Price']) * 100)
+              .toInt(), // Convert price to cents
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Subscriptions')),
+      appBar: AppBar(title: Text('Subscription Plans')),
       body: FutureBuilder<List<dynamic>>(
         future: _subscriptionTypesFuture,
         builder: (context, snapshot) {
@@ -45,7 +54,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No subscriptions available'));
+            return Center(child: Text('No subscription plans available'));
           } else {
             List<dynamic> subscriptions = snapshot.data!;
             return ListView.builder(
@@ -55,10 +64,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 return ListTile(
                   title: Text(subscription['Name']),
                   subtitle: Text(subscription['Description']),
-                  trailing: ElevatedButton(
-                    onPressed: () => _upgradeSubscription(subscription['SubscriptionTypeID']),
-                    child: Text('Upgrade'),
-                  ),
+                  trailing: Text('\$${subscription['Price']}'),
+                  onTap: () => _onSubscriptionSelected(subscription),
                 );
               },
             );

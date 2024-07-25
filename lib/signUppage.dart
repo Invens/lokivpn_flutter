@@ -262,11 +262,11 @@ class _SignUpPageState extends State<SignUpPage> {
                             padding: const EdgeInsets.symmetric(vertical: 15.0),
                           ).copyWith(
                             backgroundColor:
-                                MaterialStateProperty.resolveWith((states) {
+                                WidgetStateProperty.resolveWith((states) {
                               return _agreeToTerms ? Colors.blue : Colors.grey;
                             }),
                             elevation:
-                                MaterialStateProperty.resolveWith((states) {
+                                WidgetStateProperty.resolveWith((states) {
                               return 0.0;
                             }),
                           ),

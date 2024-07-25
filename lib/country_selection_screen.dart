@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:amp_vpn/subscription_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'homepage.dart';
 import 'recently_connected_screen.dart';
 import 'settings.dart';
-import 'subscription_screen.dart';
 
 class ServerScreen extends StatefulWidget {
   final Function(Map<String, dynamic>) onServerSelected;

@@ -75,7 +75,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   void _startVpnStateTimer() {
-    _vpnStateTimer = Timer.periodic(Duration(seconds: 1), (timer) async {
+    _vpnStateTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       bool isConnected = await VpnInfo.isVpnConnected() ?? false;
       setState(() {
         _isConnected = isConnected;
