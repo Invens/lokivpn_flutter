@@ -1,7 +1,7 @@
+import 'package:amp_vpn/resetPassword.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'api_service.dart';
 import 'homepage.dart';
 import 'services/guest_user_service.dart';
@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final ApiService _apiService = ApiService();
   final GuestUserService _guestUserService =
-      GuestUserService(baseUrl: 'https://api.lokivpn.com');
+  GuestUserService(baseUrl: 'https://api.lokivpn.com');
 
   LoginPage({super.key});
 
@@ -66,11 +66,9 @@ class LoginPage extends StatelessWidget {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.only(
-                            top:
-                                30.0), // Adjust padding to prevent hiding behind app bar
+                            top: 30.0), // Adjust padding to prevent hiding behind app bar
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              50.0), // Adjust the radius as needed
+                          borderRadius: BorderRadius.circular(50.0), // Adjust the radius as needed
                           child: Image.asset(
                             'assets/logo2.png',
                             height: 200, // Adjust the height as needed
@@ -82,8 +80,7 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 30.0, vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     border: Border(
@@ -135,7 +132,25 @@ class LoginPage extends StatelessWidget {
                         ),
                         obscureText: true,
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>  RequestResetPasswordOtpScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(color: Colors.blue),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -149,11 +164,11 @@ class LoginPage extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 15.0),
                           ).copyWith(
                             backgroundColor:
-                                WidgetStateProperty.resolveWith((states) {
+                            WidgetStateProperty.resolveWith((states) {
                               return Colors.transparent;
                             }),
                             elevation:
-                                WidgetStateProperty.resolveWith((states) {
+                            WidgetStateProperty.resolveWith((states) {
                               return 0.0;
                             }),
                           ),
@@ -191,7 +206,7 @@ class LoginPage extends StatelessWidget {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SignUpPage()),
+                                    builder: (context) => const SignUpPage()),
                               );
                             },
                             child: const Text('Sign up'),
@@ -248,8 +263,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                          height:
-                              20), // Add padding at the bottom of the login section
+                          height: 20), // Add padding at the bottom of the login section
                     ],
                   ),
                 ),
@@ -268,8 +282,7 @@ class LoginPage extends StatelessWidget {
         _passwordController.text,
       );
 
-      print(
-          'Login response: $response'); // Debugging line to check the response
+      print('Login response: $response'); // Debugging line to check the response
 
       // Save token or user information in shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -303,16 +316,21 @@ class LoginPage extends StatelessWidget {
       await prefs.setBool('isFirstTime', false);
       await prefs.setBool('isGuest', true);
       await prefs.setString('guestToken', response['token']);
-      await prefs.setString('guestID', response['guestID'].toString());
+      await prefs.setString('guestUserID', response['guestUserID'].toString());
+
+      print('GuestToken saved: ${response['token']}'); // Debugging
+      print('GuestUserID saved: ${response['guestUserID']}'); // Debugging
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Homepage()),
+        MaterialPageRoute(builder: (context) => const Homepage()),
       );
     } catch (e) {
+      print('Error during guest login: $e'); // Debugging
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Guest registration failed: $e')),
       );
     }
   }
 }
+

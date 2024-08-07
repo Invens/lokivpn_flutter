@@ -11,6 +11,8 @@ import 'otpVerification.dart';
 import 'services/guest_user_service.dart';
 
 class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
+
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
@@ -371,11 +373,11 @@ class _SignUpPageState extends State<SignUpPage> {
       await prefs.setBool('isFirstTime', false);
       await prefs.setBool('isGuest', true);
       await prefs.setString('guestToken', response['token']);
-      await prefs.setString('guestID', response['guestID'].toString());
+      await prefs.setString('guestUserID', response['guestUserID'].toString());
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Homepage()),
+        MaterialPageRoute(builder: (context) => const Homepage()),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

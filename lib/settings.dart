@@ -1,7 +1,10 @@
+import 'package:amp_vpn/about_app.dart';
+import 'package:amp_vpn/privacy_policy.dart';
 import 'package:amp_vpn/profile.dart';
 import 'package:amp_vpn/country_selection_screen.dart';
 import 'package:amp_vpn/homepage.dart';
 import 'package:amp_vpn/recently_connected_screen.dart';
+import 'package:amp_vpn/terms_of_service.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatefulWidget {
@@ -44,24 +47,43 @@ class _SettingsScreenState extends State<Settings> {
           _buildListTile(Icons.person, 'My Profile', () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) =>  ProfileScreen()),
+              MaterialPageRoute(builder: (context) =>  const ProfileScreen()),
             );
           }),
-          _buildListTile(Icons.location_on, 'Location (Nodes)', null),
-          _buildListTile(Icons.settings, 'DNS Settings', null),
-          _buildSwitchTile(Icons.wifi_off, 'Unsafe Wifi Detection', unsafeWifiDetection, (bool value) {
-            setState(() {
-              unsafeWifiDetection = value;
-            });
-          }),
+          // _buildListTile(Icons.location_on, 'Location (Nodes)', null),
+          // _buildListTile(Icons.settings, 'DNS Settings', null),
+          // _buildSwitchTile(Icons.wifi_off, 'Unsafe Wifi Detection', unsafeWifiDetection, (bool value) {
+          //   setState(() {
+          //     unsafeWifiDetection = value;
+          //   });
+          // }),
           _buildSwitchTile(Icons.notifications, 'Notification', notifications, (bool value) {
             setState(() {
               notifications = value;
             });
           }),
-          _buildListTile(Icons.policy, 'Privacy Policy', null),
-          _buildListTile(Icons.description, 'Terms of Service', null),
-          _buildListTile(Icons.info, 'About App', null),
+          _buildListTile(Icons.policy, 'Privacy Policy', (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
+            );
+          }),
+
+
+          _buildListTile(Icons.description, 'Terms of Service', (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TermsOfServicePage()),
+            );
+          }),
+
+
+          _buildListTile(Icons.info, 'About App', (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AboutPage()),
+            );
+          }),
         ],
       ),
       bottomNavigationBar: Container(

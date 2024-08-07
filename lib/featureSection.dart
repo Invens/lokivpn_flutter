@@ -2,6 +2,8 @@ import 'package:amp_vpn/loginpage.dart';
 import 'package:flutter/material.dart';
 
 class FeatureSection extends StatelessWidget {
+  const FeatureSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,7 +11,7 @@ class FeatureSection extends StatelessWidget {
         children: [
           Expanded(
             child: PageView(
-              children: [
+              children: const [
                 FeaturePage(
                   'Your Trusted VPN Solution',
                   'Our VPN uses state-of-the-art encryption to safeguard your personal information.',
@@ -50,7 +52,7 @@ class FeatureSection extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 30), // More margin from the bottom
+          const SizedBox(height: 30), // More margin from the bottom
         ],
       ),
     );
@@ -62,7 +64,7 @@ class FeaturePage extends StatelessWidget {
   final String description;
   final String imagePath;
 
-  FeaturePage(this.title, this.description, this.imagePath);
+  const FeaturePage(this.title, this.description, this.imagePath, {super.key});
 
   @override
   Widget build(BuildContext context) {

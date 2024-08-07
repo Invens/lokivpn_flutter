@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
           context, MaterialPageRoute(builder: (context) => const Homepage()));
     } else if (isFirstTime) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => FeatureSection()));
+          context, MaterialPageRoute(builder: (context) => const FeatureSection()));
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginPage()));

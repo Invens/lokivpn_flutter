@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:amp_vpn/services/notification_service.dart';
 
 class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
+
   @override
   _NotificationScreenState createState() => _NotificationScreenState();
 }
@@ -27,7 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please log in to view notifications')),
+        const SnackBar(content: Text('Please log in to view notifications')),
       );
     }
   }
@@ -35,16 +37,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Notifications')),
+      appBar: AppBar(title: const Text('Notifications')),
       body: FutureBuilder<List<dynamic>>(
         future: _notificationsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No notifications available'));
+            return const Center(child: Text('No notifications available'));
           } else {
             List<dynamic> notifications = snapshot.data!;
             return ListView.builder(

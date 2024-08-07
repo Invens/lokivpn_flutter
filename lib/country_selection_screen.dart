@@ -12,7 +12,7 @@ import 'settings.dart';
 class ServerScreen extends StatefulWidget {
   final Function(Map<String, dynamic>) onServerSelected;
 
-  const ServerScreen({required this.onServerSelected});
+  const ServerScreen({super.key, required this.onServerSelected});
 
   @override
   _ServerScreenState createState() => _ServerScreenState();
@@ -95,7 +95,7 @@ class _ServerScreenState extends State<ServerScreen>
       if (serverDetails['ServerType'] == 'Paid' && !_isSubscribed) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SubscriptionScreen()),
+          MaterialPageRoute(builder: (context) => const SubscriptionScreen()),
         );
       } else {
         widget.onServerSelected(serverDetails);
@@ -113,26 +113,26 @@ class _ServerScreenState extends State<ServerScreen>
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text(
+        title: const Text(
           'Select A Country',
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: Colors.black),
+            icon: const Icon(Icons.search, color: Colors.black),
             onPressed: () {
               // Add search functionality
             },
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
+          preferredSize: const Size.fromHeight(50.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -253,11 +253,11 @@ class _ServerScreenState extends State<ServerScreen>
       future: serversFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No servers available'));
+          return const Center(child: Text('No servers available'));
         } else {
           List<dynamic> servers = snapshot.data!;
           return ListView.builder(
@@ -269,10 +269,10 @@ class _ServerScreenState extends State<ServerScreen>
                   server['CountryFlag'],
                   width: 40,
                   errorBuilder: (context, error, stackTrace) =>
-                      Icon(Icons.flag),
+                      const Icon(Icons.flag),
                 ),
                 title: Text(server['CountryName']),
-                trailing: Icon(Icons.signal_wifi_4_bar, color: Colors.blue),
+                trailing: const Icon(Icons.signal_wifi_4_bar, color: Colors.blue),
                 onTap: () => _selectServer(server['ServerID'].toString()),
               );
             },
@@ -288,15 +288,15 @@ class FilterButton extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  FilterButton(
-      {required this.text, required this.isSelected, required this.onTap});
+  const FilterButton(
+      {super.key, required this.text, required this.isSelected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected ? Colors.green : Colors.white,
           borderRadius: BorderRadius.circular(20),

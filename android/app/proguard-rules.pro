@@ -1,0 +1,9 @@
+-keep class com.appmontizesg.lokivpn.** { *; }
+-keep class de.blinkt.openvpn.** { *; }
+-keep class net.openvpn.** { *; }
+-keep class org.apache.** { *; }
+-keep class org.spongycastle.** { *; }
+-dontwarn de.blinkt.openvpn.**
+-dontwarn net.openvpn.**
+-dontwarn org.apache.**
+-dontwarn org.spongycastle.**

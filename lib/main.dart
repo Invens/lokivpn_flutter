@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'VPN',
+      title: 'Loki VPN',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: GoogleFonts.poppins().fontFamily,

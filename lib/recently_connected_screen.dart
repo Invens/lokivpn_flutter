@@ -66,11 +66,11 @@ class _RecentlyConnectedScreenState extends State<RecentlyConnectedScreen> {
               future: _recentlyConnectedServersFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: Text('No recently connected servers'));
+                  return const Center(child: Text('No recently connected servers'));
                 } else {
                   return ListView(
                     children: snapshot.data!.map((server) {
@@ -88,9 +88,9 @@ class _RecentlyConnectedScreenState extends State<RecentlyConnectedScreen> {
                                 countryFlag,
                                 width: 40,
                                 errorBuilder: (context, error, stackTrace) =>
-                                    Icon(Icons.flag),
+                                    const Icon(Icons.flag),
                               )
-                            : Icon(Icons.flag),
+                            : const Icon(Icons.flag),
                         title: Text(serverName),
                         subtitle: Text('Connected on: $connectionTime'),
                         trailing: Column(
@@ -178,7 +178,7 @@ class _RecentlyConnectedScreenState extends State<RecentlyConnectedScreen> {
                   break;
               }
             },
-            currentIndex: 1,
+            currentIndex: 2,
             selectedItemColor: Colors.blue,
             unselectedItemColor: Colors.grey,
             backgroundColor: Colors
