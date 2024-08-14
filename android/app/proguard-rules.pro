@@ -2,6 +2,7 @@
 -keep class de.blinkt.openvpn.** { *; }
 -keep class net.openvpn.** { *; }
 -keep class org.apache.** { *; }
+-keep class com.openvpn.** { *; }
 -keep class org.spongycastle.** { *; }
 -dontwarn de.blinkt.openvpn.**
 -dontwarn net.openvpn.**

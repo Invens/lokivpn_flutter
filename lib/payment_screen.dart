@@ -148,7 +148,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                SizedBox(height: 100),
+                const SizedBox(height: 100),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(50.0),
                   child: Image.asset(
@@ -197,10 +197,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ).copyWith(
-                            backgroundColor: MaterialStateProperty.resolveWith((states) {
+                            backgroundColor: WidgetStateProperty.resolveWith((states) {
                               return Colors.transparent;
                             }),
-                            elevation: MaterialStateProperty.resolveWith((states) {
+                            elevation: WidgetStateProperty.resolveWith((states) {
                               return 0.0;
                             }),
                           ),

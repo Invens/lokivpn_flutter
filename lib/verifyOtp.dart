@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class VerifyOtpAndResetPasswordScreen extends StatefulWidget {
   final String email;
 
-  VerifyOtpAndResetPasswordScreen({required this.email});
+  const VerifyOtpAndResetPasswordScreen({super.key, required this.email});
 
   @override
   _VerifyOtpAndResetPasswordScreenState createState() => _VerifyOtpAndResetPasswordScreenState();
@@ -37,7 +37,7 @@ class _VerifyOtpAndResetPasswordScreenState extends State<VerifyOtpAndResetPassw
 
   void _startResendCountdown() {
     _resendCountdown = 60;
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_resendCountdown == 0) {
         timer.cancel();
       } else {
@@ -126,7 +126,7 @@ class _VerifyOtpAndResetPasswordScreenState extends State<VerifyOtpAndResetPassw
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.light,
         ),
-        title: Text('Verify OTP'),
+        title: const Text('Verify OTP'),
       ),
       body: Stack(
         children: [
@@ -241,11 +241,11 @@ class _VerifyOtpAndResetPasswordScreenState extends State<VerifyOtpAndResetPassw
                             padding: const EdgeInsets.symmetric(vertical: 15.0),
                           ).copyWith(
                             backgroundColor:
-                            MaterialStateProperty.resolveWith((states) {
+                            WidgetStateProperty.resolveWith((states) {
                               return Colors.transparent;
                             }),
                             elevation:
-                            MaterialStateProperty.resolveWith((states) {
+                            WidgetStateProperty.resolveWith((states) {
                               return 0.0;
                             }),
                           ),

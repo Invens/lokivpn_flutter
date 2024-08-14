@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:openvpn_flutter/openvpn_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,9 +11,6 @@ import 'api_service.dart';
 import 'country_selection_screen.dart';
 import 'recently_connected_screen.dart';
 import 'settings.dart';
-import 'subscription_screen.dart';
-import 'services/guest_user_service.dart';
-import 'loginpage.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> _requestPermissions() async {

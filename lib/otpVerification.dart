@@ -294,12 +294,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 15.0),
                           ).copyWith(
-                            backgroundColor: MaterialStateProperty.resolveWith(
+                            backgroundColor: WidgetStateProperty.resolveWith(
                                   (states) {
                                 return Colors.transparent;
                               },
                             ),
-                            elevation: MaterialStateProperty.resolveWith(
+                            elevation: WidgetStateProperty.resolveWith(
                                   (states) {
                                 return 0.0;
                               },

@@ -26,6 +26,10 @@ android {
     compileSdk = localProperties.getProperty("flutter.compileSdkVersion")?.toInteger() ?: 34
     ndkVersion = localProperties.getProperty("flutter.ndkVersion")
 
+    buildFeatures {
+        aidl = true
+        buildConfig = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -51,9 +55,10 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled false
+            minifyEnabled true
             useProguard false
             shrinkResources false
+
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

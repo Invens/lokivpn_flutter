@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class RequestResetPasswordOtpScreen extends StatefulWidget {
+  const RequestResetPasswordOtpScreen({super.key});
+
   @override
   _RequestResetPasswordOtpScreenState createState() => _RequestResetPasswordOtpScreenState();
 }
@@ -57,7 +59,7 @@ class _RequestResetPasswordOtpScreenState extends State<RequestResetPasswordOtpS
           statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.light,
         ),
-        title: Text('Request OTP'),
+        title: const Text('Request OTP'),
       ),
       body: Stack(
         children: [
@@ -143,11 +145,11 @@ class _RequestResetPasswordOtpScreenState extends State<RequestResetPasswordOtpS
                             padding: const EdgeInsets.symmetric(vertical: 15.0),
                           ).copyWith(
                             backgroundColor:
-                            MaterialStateProperty.resolveWith((states) {
+                            WidgetStateProperty.resolveWith((states) {
                               return Colors.transparent;
                             }),
                             elevation:
-                            MaterialStateProperty.resolveWith((states) {
+                            WidgetStateProperty.resolveWith((states) {
                               return 0.0;
                             }),
                           ),

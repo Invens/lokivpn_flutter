@@ -65,7 +65,7 @@ class _SettingsScreenState extends State<Settings> {
           _buildListTile(Icons.policy, 'Privacy Policy', (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
+              MaterialPageRoute(builder: (context) => const PrivacyPolicyPage()),
             );
           }),
 
@@ -73,7 +73,7 @@ class _SettingsScreenState extends State<Settings> {
           _buildListTile(Icons.description, 'Terms of Service', (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => TermsOfServicePage()),
+              MaterialPageRoute(builder: (context) => const TermsOfServicePage()),
             );
           }),
 
@@ -81,7 +81,7 @@ class _SettingsScreenState extends State<Settings> {
           _buildListTile(Icons.info, 'About App', (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AboutPage()),
+              MaterialPageRoute(builder: (context) => const AboutPage()),
             );
           }),
         ],
