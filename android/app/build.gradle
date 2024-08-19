@@ -1,5 +1,8 @@
 plugins {
     id "com.android.application"
+    // START: FlutterFire Configuration
+    id 'com.google.gms.google-services'
+    // END: FlutterFire Configuration
     id "org.jetbrains.kotlin.android"
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -26,9 +29,12 @@ android {
     compileSdk = localProperties.getProperty("flutter.compileSdkVersion")?.toInteger() ?: 34
     ndkVersion = localProperties.getProperty("flutter.ndkVersion")
 
-    buildFeatures {
-        aidl = true
-        buildConfig = true
+//    buildFeatures {
+//        aidl = true
+//        buildConfig = true
+//    }
+    bundle {
+        abi { enableSplit = false }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -54,11 +60,10 @@ android {
 
     buildTypes {
         release {
+            debuggable false
             signingConfig signingConfigs.release
             minifyEnabled true
-            useProguard false
-            shrinkResources false
-
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
